@@ -1,36 +1,43 @@
 package pl.edu.wszib.car.rent.gui;
 
 import pl.edu.wszib.car.rent.core.Authenticator;
+import pl.edu.wszib.car.rent.database.VehicleDB;
 import pl.edu.wszib.car.rent.model.*;
 
 import java.util.Scanner;
 
 public class GUI {
-    private static final Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
+    final Authenticator authenticator = Authenticator.getInstance();
+    final VehicleDB vehicleDB = VehicleDB.getInstance();
+    private static final GUI instance = new GUI();
 
-    public static String showMenu() {
+    private GUI() {
+    }
+
+    public String showMenu() {
         System.out.println("1. List vehicles");
         System.out.println("2. Rent vehicle");
         System.out.println("3. Exit");
-        if(Authenticator.loggedUser != null &&
-                Authenticator.loggedUser.getRole().equals("ADMIN")) {
+        if(this.authenticator.getLoggedUser() != null &&
+                this.authenticator.getLoggedUser().getRole() == User.Role.ADMIN) {
             System.out.println("4. Add vehicle");
         }
         return scanner.nextLine();
     }
 
-    public static void listCars(Vehicle[] vehicles) {
-        for(Vehicle vehicle : vehicles) {
+    public void listCars() {
+        for(Vehicle vehicle : this.vehicleDB.getVehicles()) {
             System.out.println(vehicle);
         }
     }
 
-    public static String readPlate() {
+    public String readPlate() {
         System.out.println("Plate:");
-        return scanner.nextLine();
+        return this.scanner.nextLine();
     }
 
-    public static void showRentResult(boolean result) {
+    public void showRentResult(boolean result) {
         if(result) {
             System.out.println("Rent successful");
         } else {
@@ -38,43 +45,47 @@ public class GUI {
         }
     }
 
-    public static User readLoginAndPassword() {
+    public User readLoginAndPassword() {
         User user = new User();
         System.out.println("Login:");
-        user.setLogin(scanner.nextLine());
+        user.setLogin(this.scanner.nextLine());
         System.out.println("Password:");
-        user.setPassword(scanner.nextLine());
+        user.setPassword(this.scanner.nextLine());
         return user;
     }
 
-    public static Vehicle readNewVehicleData() {
+    public Vehicle readNewVehicleData() {
         System.out.println("1. Car");
         System.out.println("2. Bus");
         System.out.println("3. Motorcycle");
-        String choose = scanner.nextLine();
+        String choose = this.scanner.nextLine();
         System.out.println("Brand:");
-        String brand = scanner.nextLine();
+        String brand = this.scanner.nextLine();
         System.out.println("Model:");
-        String model = scanner.nextLine();
+        String model = this.scanner.nextLine();
         System.out.println("Year:");
-        int year = Integer.parseInt(scanner.nextLine());
+        int year = Integer.parseInt(this.scanner.nextLine());
         System.out.println("Price:");
-        double price = Double.parseDouble(scanner.nextLine());
+        double price = Double.parseDouble(this.scanner.nextLine());
         System.out.println("Plate:");
-        String plate = scanner.nextLine();
+        String plate = this.scanner.nextLine();
         switch(choose) {
             case "1":
                 return new Car(brand, model, year, price, plate);
             case "2":
                 System.out.println("Seats:");
                 return new Bus(brand, model, year, price, plate,
-                        Integer.parseInt(scanner.nextLine()));
+                        Integer.parseInt(this.scanner.nextLine()));
             case "3":
                 System.out.println("Cart: (Y/N)");
                 return new Motorcycle(brand, model, year, price, plate,
-                        scanner.nextLine().equals("Y"));
+                        this.scanner.nextLine().equals("Y"));
         }
 
         return null;
+    }
+
+    public static GUI getInstance() {
+        return instance;
     }
 }

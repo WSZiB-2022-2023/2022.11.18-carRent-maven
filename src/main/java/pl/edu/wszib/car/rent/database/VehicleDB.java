@@ -7,8 +7,9 @@ import pl.edu.wszib.car.rent.model.Vehicle;
 
 public class VehicleDB {
     private Vehicle[] vehicles = new Vehicle[8];
+    private static final VehicleDB instance = new VehicleDB();
 
-    public VehicleDB() {
+    private VehicleDB() {
         this.vehicles[0] = new Car("Audi", "A5",
                 2015, 400.00, "KR11");
         this.vehicles[1] = new Car("BMW", "5",
@@ -50,5 +51,9 @@ public class VehicleDB {
         }
         newVehicles[newVehicles.length - 1] = vehicle;
         this.vehicles = newVehicles;
+    }
+
+    public static VehicleDB getInstance() {
+        return instance;
     }
 }

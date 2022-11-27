@@ -3,17 +3,24 @@ package pl.edu.wszib.car.rent.core;
 import pl.edu.wszib.car.rent.database.UserDB;
 import pl.edu.wszib.car.rent.database.VehicleDB;
 import pl.edu.wszib.car.rent.gui.GUI;
+import pl.edu.wszib.car.rent.model.User;
 
 public class Core {
-    public static void start() {
-        final VehicleDB vehicleDB = new VehicleDB();
-        final UserDB userDB = new UserDB();
+    final VehicleDB vehicleDB = VehicleDB.getInstance();
+    final Authenticator authenticator = Authenticator.getInstance();
+    final GUI gui = GUI.getInstance();
+    private static final Core instance = new Core();
+
+    private Core() {
+
+    }
+    public void start() {
         boolean isRunning = false;
         int counter = 0;
 
         while(!isRunning && counter < 3) {
-            Authenticator.authenticate(GUI.readLoginAndPassword(), userDB);
-            isRunning = Authenticator.loggedUser != null;
+            this.authenticator.authenticate(this.gui.readLoginAndPassword());
+            isRunning = this.authenticator.getLoggedUser() != null;
             if(!isRunning) {
                 System.out.println("Not authorized !!");
             }
@@ -21,19 +28,20 @@ public class Core {
         }
 
         while(isRunning) {
-            switch(GUI.showMenu()) {
+            switch(this.gui.showMenu()) {
                 case "1":
-                    GUI.listCars(vehicleDB.getVehicles());
+                    this.gui.listCars();
                     break;
                 case "2":
-                    GUI.showRentResult(vehicleDB.rentVehicle(GUI.readPlate()));
+                    this.gui.showRentResult(this.vehicleDB.rentVehicle(this.gui.readPlate()));
                     break;
                 case "3":
                     isRunning = false;
                     break;
                 case "4":
-                    if(Authenticator.loggedUser != null && Authenticator.loggedUser.getRole().equals("ADMIN")) {
-                        vehicleDB.addVehicle(GUI.readNewVehicleData());
+                    if(this.authenticator.getLoggedUser() != null &&
+                            this.authenticator.getLoggedUser().getRole() == User.Role.ADMIN) {
+                        this.vehicleDB.addVehicle(this.gui.readNewVehicleData());
                         break;
                     }
                 default:
@@ -41,5 +49,9 @@ public class Core {
                     break;
             }
         }
+    }
+
+    public static Core getInstance() {
+        return instance;
     }
 }
