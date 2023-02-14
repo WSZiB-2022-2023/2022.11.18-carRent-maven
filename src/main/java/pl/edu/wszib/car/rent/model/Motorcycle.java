@@ -8,6 +8,11 @@ public class Motorcycle extends Vehicle {
         this.cart = cart;
     }
 
+    public Motorcycle(String brand, String model, int year, double price, boolean rent, String plate, boolean cart) {
+        super(brand, model, year, price, rent, plate);
+        this.cart = cart;
+    }
+
     public Motorcycle() {
     }
 

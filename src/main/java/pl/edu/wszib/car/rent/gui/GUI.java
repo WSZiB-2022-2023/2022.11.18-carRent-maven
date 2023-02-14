@@ -1,6 +1,7 @@
 package pl.edu.wszib.car.rent.gui;
 
 import pl.edu.wszib.car.rent.core.Authenticator;
+import pl.edu.wszib.car.rent.database.VehicleDAO;
 import pl.edu.wszib.car.rent.database.VehicleDB;
 import pl.edu.wszib.car.rent.model.*;
 
@@ -9,7 +10,7 @@ import java.util.Scanner;
 public class GUI {
     private final Scanner scanner = new Scanner(System.in);
     final Authenticator authenticator = Authenticator.getInstance();
-    final VehicleDB vehicleDB = VehicleDB.getInstance();
+    final VehicleDAO vehicleDB = VehicleDAO.getInstance();
     private static final GUI instance = new GUI();
 
     private GUI() {

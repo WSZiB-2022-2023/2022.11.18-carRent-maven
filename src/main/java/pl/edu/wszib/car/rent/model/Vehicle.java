@@ -21,6 +21,15 @@ public class Vehicle {
         this.plate = plate;
     }
 
+    public Vehicle(String brand, String model, int year, double price, boolean rent, String plate) {
+        this.brand = brand;
+        this.model = model;
+        this.year = year;
+        this.price = price;
+        this.rent = rent;
+        this.plate = plate;
+    }
+
     public String getBrand() {
         return brand;
     }
@@ -84,5 +93,11 @@ public class Vehicle {
                 .append(" Dostepny: ")
                 .append(this.isRent() ? "Nie" : "Tak")
                 .toString();
+    }
+
+    public enum Type {
+        CAR,
+        BUS,
+        MOTORCYCLE;
     }
 }

@@ -1,12 +1,12 @@
 package pl.edu.wszib.car.rent.core;
 
-import pl.edu.wszib.car.rent.database.UserDB;
+import pl.edu.wszib.car.rent.database.VehicleDAO;
 import pl.edu.wszib.car.rent.database.VehicleDB;
 import pl.edu.wszib.car.rent.gui.GUI;
 import pl.edu.wszib.car.rent.model.User;
 
 public class Core {
-    final VehicleDB vehicleDB = VehicleDB.getInstance();
+    final VehicleDAO vehicleDB = VehicleDAO.getInstance();
     final Authenticator authenticator = Authenticator.getInstance();
     final GUI gui = GUI.getInstance();
     private static final Core instance = new Core();
